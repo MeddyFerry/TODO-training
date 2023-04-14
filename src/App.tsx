@@ -2,6 +2,16 @@ import * as React from "react";
 
 function App() {
   const [tasks, setTasks] = React.useState<string[]>([]);
+  // const [task, setTask] = React.useState<string>("");
+
+  const handleDeleteClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const removeIndex = tasks.filter((task, index) => index !== 0);
+    setTasks(removeIndex);
+  };
+
+  // const handleChange = (task: React.ChangeEvent<HTMLInputElement>) => {
+  //   setTask(task.target.value);
+  // };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -33,7 +43,26 @@ function App() {
         <div className="tasksLists border-2 border-blue-500 hover:border-yellow-500 p-4 space-x-4">
           <ul className="text-slate-100">
             {tasks.map((task, index) => (
-              <li key={index}>{task}</li>
+              <li
+                className="flex flex-row justify-between items-center p-2"
+                key={index}
+              >
+                {task}
+                <button
+                  className="text-red-500  p-1 ml-2 border-2 border-blue-500 hover:border-red-500"
+                  onClick={handleDeleteClick}
+                >
+                  X
+                </button>
+                {/* <input
+                  type="text"
+                  value={task}
+                  onChange={handleChange}
+                  className="text-red-500  p-1 border-2 border-blue-500 hover:border-green-500"
+                >
+                  O
+                </input> */}
+              </li>
             ))}
           </ul>
         </div>
