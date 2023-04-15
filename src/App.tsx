@@ -2,23 +2,32 @@ import * as React from "react";
 
 function App() {
   const [tasks, setTasks] = React.useState<string[]>([]);
-  // const [task, setTask] = React.useState<string>("");
+  const [editingIndex, setEditingIndex] = React.useState<number | null>(null);
 
-  const handleDeleteClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const removeIndex = tasks.filter((task, index) => index !== 0);
-    setTasks(removeIndex);
+  const handleDeleteClick = (index: number) => {
+    const newTasks = tasks.filter((_, i) => i !== index);
+    setTasks(newTasks);
   };
 
-  // const handleChange = (task: React.ChangeEvent<HTMLInputElement>) => {
-  //   setTask(task.target.value);
-  // };
+  const handleEditClick = (index: number) => {
+    setEditingIndex(index);
+  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const target = e.target as HTMLFormElement;
-    const newTask = (target.elements.namedItem("task") as HTMLInputElement)
+    const taskValue = (target.elements.namedItem("task") as HTMLInputElement)
       .value;
-    setTasks([...tasks, newTask]);
+
+    if (editingIndex !== null) {
+      const updatedTasks = [...tasks];
+      updatedTasks[editingIndex] = taskValue;
+      setTasks(updatedTasks);
+      setEditingIndex(null);
+    } else {
+      setTasks([...tasks, taskValue]);
+    }
+
     target.reset();
   };
 
@@ -27,20 +36,39 @@ function App() {
   }, [tasks]);
 
   return (
-    <div className="App bg-slate-900	 h-screen ">
+    <div className="App bg-slate-900 h-screen">
       <div className="container flex flex-row-reverse flex-wrap justify-evenly items-center content-stretch mx-auto my-0">
         <form
-          className="border-2 border-blue-500 hover:border-yellow-500 p-4 space-x-4"
+          className="border-2 rounded-lg border-blue-500 hover:border-yellow-500 p-4 space-x-4"
           onSubmit={handleSubmit}
         >
-          <div className="task">
-            <input type="text" name="task" />
+          <div className="w-full md:w-1/3 mb-2">
+            <div className="task">
+              <label
+                className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4"
+                htmlFor="task"
+              >
+                {editingIndex !== null
+                  ? "Modifier la tâche"
+                  : "Ajouter une tâche"}
+              </label>
+              <input
+                type="text"
+                name="task"
+                id="task"
+                defaultValue={editingIndex !== null ? tasks[editingIndex] : ""}
+                className="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:shadow-outline"
+              />
+            </div>
+            <button
+              type="submit"
+              className="w-full mt-2 px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
+            >
+              {editingIndex !== null ? "Mettre à jour" : "Ajouter une tâche"}
+            </button>
           </div>
-          <button type="submit" className="addTask text-base text-slate-100	">
-            Ajouter une tâche
-          </button>
         </form>
-        <div className="tasksLists border-2 border-blue-500 hover:border-yellow-500 p-4 space-x-4">
+        <div className="tasksLists border rounded-lg p-4 space-x-4">
           <ul className="text-slate-100">
             {tasks.map((task, index) => (
               <li
@@ -49,19 +77,17 @@ function App() {
               >
                 {task}
                 <button
-                  className="text-red-500  p-1 ml-2 border-2 border-blue-500 hover:border-red-500"
-                  onClick={handleDeleteClick}
+                  className="text-blue-500 p-1 ml-2 border-2 border-blue-500 hover:border-yellow-500"
+                  onClick={() => handleEditClick(index)}
+                >
+                  Edit
+                </button>
+                <button
+                  className="text-red-500 p-1 ml-2 border-2 border-blue-500 hover:border-red-500"
+                  onClick={() => handleDeleteClick(index)}
                 >
                   X
                 </button>
-                {/* <input
-                  type="text"
-                  value={task}
-                  onChange={handleChange}
-                  className="text-red-500  p-1 border-2 border-blue-500 hover:border-green-500"
-                >
-                  O
-                </input> */}
               </li>
             ))}
           </ul>
