@@ -39,10 +39,10 @@ function App() {
     <div className="App bg-slate-900 h-screen">
       <div className="container flex flex-row-reverse flex-wrap justify-evenly items-center content-stretch mx-auto my-0">
         <form
-          className="border-2 rounded-lg border-blue-500 hover:border-yellow-500 p-4 space-x-4"
+          className="border-2 rounded-lg border-violet-400 hover:border-slate-50 p-4 space-x-4"
           onSubmit={handleSubmit}
         >
-          <div className="w-full md:w-1/3 mb-2">
+          <div className="w-full">
             <div className="task">
               <label
                 className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4"
@@ -77,7 +77,7 @@ function App() {
               >
                 {task}
                 <button
-                  className="text-blue-500 p-1 ml-2 border-2 border-blue-500 hover:border-yellow-500"
+                  className="text-blue-500 p-1 ml-2 border-2 border-blue-500 hover:border-green-500"
                   onClick={() => handleEditClick(index)}
                 >
                   Edit
