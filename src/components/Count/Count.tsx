@@ -1,5 +1,5 @@
-import React from "react";
-import { useReducer } from "react";
+import React, { useContext, useReducer } from "react";
+import ThemeContext from "../Theme/ThemeContext";
 
 interface CounterState {
   count: number;
@@ -23,11 +23,18 @@ function reducer(state: CounterState, action: Action): CounterState {
 }
 
 function Count() {
+  const { theme } = useContext(ThemeContext); // Pas besoin d'assertion non-null maintenant
+
   const [state, dispatch] = useReducer(reducer, {
     count: 0,
   });
+
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
+    <div
+      className={`container ${
+        theme === "sombre" ? "bg-gray-900" : "bg-gray-100"
+      } mx-auto p-4`}
+    >
       <div className="bg-white p-6 rounded-lg shadow-md">
         <div className="text-xl mb-4">
           Count: <span className="font-bold">{state.count}</span>
